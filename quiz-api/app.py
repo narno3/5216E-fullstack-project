@@ -44,8 +44,9 @@ def build_token():
 @app.route('/login', methods=['POST'])
 def getPassword():
     payload = request.get_json()
-    tried_password = payload['password']
-    hashed = hashlib.md5(tried_password)
+    tried_password = payload['password'].encode('utf-8')
+    hashed = hashlib.md5(tried_password).digest()
+    
     if hashed == b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@':
         access_token = {}
         access_token['token'] = build_token()
