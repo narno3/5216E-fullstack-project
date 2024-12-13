@@ -1,5 +1,6 @@
 import datetime
 from flask import Flask, request
+import hashlib
 from flask_cors import CORS
 import hashlib
 import jwt
@@ -42,12 +43,14 @@ def build_token():
     
 @app.route('/login', methods=['POST'])
 def getPassword():
-	payload = request.get_json()
-	if payload['password'] == 'flask2023':
-		access_token = {}
-		access_token['token'] = build_token()
-		return access_token
-	return 'Unauthorized', 401
+    payload = request.get_json()
+    tried_password = payload['password']
+    hashed = hashlib.md5(tried_password)
+    if hashed == b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@':
+        access_token = {}
+        access_token['token'] = build_token()
+        return access_token
+    return 'Unauthorized', 401
 
 if __name__ == "__main__":
     app.run()
