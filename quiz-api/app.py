@@ -53,5 +53,14 @@ def getPassword():
         return access_token
     return 'Unauthorized', 401
 
+@app.route('/questions', methods=['POST'])
+def registerQuestion():
+    #Récupérer le token envoyé en paramètre
+    request.headers.get('Authorization')
+
+    #récupèrer un l'objet json envoyé dans le body de la requète
+    print(request.get_json())
+
+
 if __name__ == "__main__":
     app.run()
