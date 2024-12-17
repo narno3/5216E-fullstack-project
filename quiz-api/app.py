@@ -6,6 +6,7 @@ import hashlib
 import jwt
 import sqlite3
 from models import Question
+from db_helpers import insert_question
 
 app = Flask(__name__)
 CORS(app)
@@ -61,37 +62,14 @@ def insertQuestion():
     request.headers.get('Authorization')
 
     #récupèrer un l'objet json envoyé dans le body de la requète
-    print(request.get_json())
-
-    # create a connection
-    db_connection = sqlite3.connect("./database.db")
-
-    # set the sqlite connection in "manual transaction mode"
-    # (by default, all execute calls are performed in their own transactions, not what we want)
-    db_connection.isolation_level = None
-
-    #Create cursor
-    cur = db_connection.cursor()
-
-    # start transaction
-    cur.execute("begin")
+    # print(request.get_json())
 
     json = request.get_json()
     input_question = Question.from_json(json)
 
-    # save the question to db
-    try :
-        insertion_result = cur.execute(
-            f"INSERT INTO Questions (position, title, text, image) VALUES"
-            f"('{input_question.position}', '{input_question.title}', '{input_question.text}', '{input_question.image}')"
-        )
+    question_id = insert_question(input_question)
 
-        # send the request
-        cur.execute("commit") 
-
-    # in case of exception, rollback the transaction
-    except:
-        cur.execute('rollback')
+    return question_id
 
     #Retourner l'id de la question
 
