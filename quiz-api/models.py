@@ -7,19 +7,12 @@ class Question():
 		self.image = image
 		self.possibleAnswers = possibleAnswers
 
-	def questionJsonToPython(json):
-		title = json['title']
-		position = json['position']
-		text = json['text']
-		image = json['image']
-		answers = json['possibleAnswers']
-		return new Question()
-
-	def questionJsonToPython(question):
-		title = json['title']
-		position = json['position']
-		text = json['text']
-		image = json['image']
-		answers = json['possibleAnswers']
-		return new Question()
+	def toJson(self):
+		json = {}
+		json['title'] = self.title
+		json['text'] = self.text
+		json['position'] = self.position
+		json['image'] = self.image
+		json['possibleAnswers'] = self.possibleAnswers
+		return json
      
