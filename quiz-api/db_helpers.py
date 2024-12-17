@@ -1,5 +1,6 @@
 from models import Question
 import sqlite3
+from flask import flash
 
 def insert_question(input_question: Question) -> int:
     """inserts question into sqlite database"""
@@ -17,16 +18,22 @@ def insert_question(input_question: Question) -> int:
     try :
         cur.execute(
             f"INSERT INTO Questions (position, title, text, image) VALUES"
-            f"('{input_question.position}', '{input_question.title}', '{input_question.text}', '{input_question.image}')"
+            f'({input_question.position}, "{input_question.title}", "{input_question.text}", "{input_question.image}")'
         )
 
         # send the request
         cur.execute("commit") 
 
-        question_id = cur.execute(f"SELECT id from Questions WHERE position = {input_question.position}")
+        query = cur.execute(f"SELECT id from Questions WHERE position = {input_question.position}")
+        question_id = query.fetchone()[0]
+
 
     # in case of exception, rollback the transaction
-    except:
+    except Exception as e:
         cur.execute('rollback')
+        cur.close()
+        flash(e)
+        return e
 
+    cur.close()
     return question_id

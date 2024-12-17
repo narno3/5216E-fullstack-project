@@ -1,6 +1,6 @@
 # Exemple de création de classe en python
 class Question():
-	def init(self, title: str, text: str, position: int, image: str, possibleAnswers: dict):
+	def __init__(self, title: str, text: str, position: int, image: str, possibleAnswers: dict):
 		self.title = title
 		self.text = text
 		self.position = position
@@ -25,5 +25,5 @@ class Question():
 			position=json['position'],
 			text=json['text'],
 			image = json['image'],
-			answers = json['answers']
+			possibleAnswers = json['possibleAnswers']
 		)

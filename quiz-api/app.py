@@ -69,7 +69,8 @@ def insertQuestion():
 
     question_id = insert_question(input_question)
 
-    return question_id
+
+    return {"id": question_id}
 
     #Retourner l'id de la question
 
