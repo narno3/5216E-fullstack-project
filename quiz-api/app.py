@@ -4,6 +4,8 @@ import hashlib
 from flask_cors import CORS
 import hashlib
 import jwt
+import sqlite3
+from models import Question
 
 app = Flask(__name__)
 CORS(app)
@@ -54,24 +56,45 @@ def getPassword():
     return 'Unauthorized', 401
 
 @app.route('/questions', methods=['POST'])
-def registerQuestion():
+def insertQuestion():
     #Récupérer le token envoyé en paramètre
     request.headers.get('Authorization')
 
     #récupèrer un l'objet json envoyé dans le body de la requète
     print(request.get_json())
 
-    #Ajouter la question dans la base
+    # create a connection
+    db_connection = sqlite3.connect("./database.db")
+
+    # set the sqlite connection in "manual transaction mode"
+    # (by default, all execute calls are performed in their own transactions, not what we want)
+    db_connection.isolation_level = None
+
+    #Create cursor
+    cur = db_connection.cursor()
+
+    # start transaction
+    cur.execute("begin")
+
+    json = request.get_json()
+    input_question = Question.from_json(json)
+
+    # save the question to db
+    try :
+        insertion_result = cur.execute(
+            f"INSERT INTO Questions (position, title, text, image) VALUES"
+            f"('{input_question.position}', '{input_question.title}', '{input_question.text}', '{input_question.image}')"
+        )
+
+        # send the request
+        cur.execute("commit") 
+
+    # in case of exception, rollback the transaction
+    except:
+        cur.execute('rollback')
 
     #Retourner l'id de la question
 
-def questionJsonToPython(json):
-    title = json['title']
-    position = json['position']
-    text = json['text']
-    image = json['image']
-    answers = json['possibleAnswers']
-     
 
 if __name__ == "__main__":
     app.run()
