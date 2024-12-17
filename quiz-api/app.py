@@ -65,5 +65,13 @@ def registerQuestion():
 
     #Retourner l'id de la question
 
+def questionJsonToPython(json):
+    title = json['title']
+    position = json['position']
+    text = json['text']
+    image = json['image']
+    answers = json['possibleAnswers']
+     
+
 if __name__ == "__main__":
     app.run()
