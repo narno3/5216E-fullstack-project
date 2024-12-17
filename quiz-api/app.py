@@ -61,6 +61,9 @@ def registerQuestion():
     #récupèrer un l'objet json envoyé dans le body de la requète
     print(request.get_json())
 
+    #Ajouter la question dans la base
+
+    #Retourner l'id de la question
 
 if __name__ == "__main__":
     app.run()
