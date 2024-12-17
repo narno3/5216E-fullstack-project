@@ -7,7 +7,8 @@ class Question():
 		self.image = image
 		self.possibleAnswers = possibleAnswers
 
-	def toJson(self):
+	def to_json(self) -> dict:
+		"""creates json from question object"""
 		json = {}
 		json['title'] = self.title
 		json['text'] = self.text
@@ -15,4 +16,14 @@ class Question():
 		json['image'] = self.image
 		json['possibleAnswers'] = self.possibleAnswers
 		return json
-     
+
+	@classmethod
+	def from_json(cls, json: dict) -> "Question":
+		"""creates python object from json"""
+		return cls(
+			title=json['title'],
+			position=json['position'],
+			text=json['text'],
+			image = json['image'],
+			answers = json['answers']
+		)
