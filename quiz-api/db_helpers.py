@@ -4,6 +4,8 @@ from flask import flash
 
 def insert_question(input_question: Question) -> int:
     """inserts question into sqlite database"""
+    question_id = -1
+
     db_connection = sqlite3.connect("./database.db")
 
     # set the sqlite connection in "manual transaction mode"
@@ -33,7 +35,6 @@ def insert_question(input_question: Question) -> int:
         cur.execute('rollback')
         cur.close()
         flash(e)
-        return e
 
     cur.close()
     return question_id
